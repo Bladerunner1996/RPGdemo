@@ -513,17 +513,6 @@ void ASlashCharacter::ArrowLineTrace(FHitResult& BoxHit)
 
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(this);
-	
-	/*UKismetSystemLibrary::LineTraceSingle(
-		this,
-		CameraLocation,
-		TraceEndLocation,
-		ETraceTypeQuery::TraceTypeQuery1,
-		false,
-		ActorsToIgnore,
-		EDrawDebugTrace::ForDuration,
-		BoxHit,
-		true);*/
 
 	GetWorld()->LineTraceSingleByChannel(
 		BoxHit,
@@ -784,21 +773,6 @@ void ASlashCharacter::ExchangeInventoryItems(int32 CurrentItemIndex, int32 NewIt
 	OldEquippedWeapon->SetItemState(EItemState::EIS_PickedUp);
 	NewWeapon->SetItemState(EItemState::EIS_Equipped);
 }
-
-//void ASlashCharacter::ExchangeInventoryItems(int32 CurrentItemIndex, int32 NewItemIndex)
-//{
-//	if ((CurrentItemIndex == NewItemIndex) || (NewItemIndex >= Inventory.Num())) return;
-//	auto OldEquippedWeapon = EquippedWeapon;
-//	auto NewWeapon = Cast<AWeapon>(Inventory[NewItemIndex]);
-//	OldEquippedWeapon->SetSlotIndex(NewItemIndex);
-//	NewWeapon->SetSlotIndex(CurrentItemIndex);
-//	EquipWeapon(NewWeapon);
-//
-//	OldEquippedWeapon->SetItemState(EItemState::EIS_PickedUp);
-//	NewWeapon->SetItemState(EItemState::EIS_Equipped);
-//}
-
-
 
 
 void ASlashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

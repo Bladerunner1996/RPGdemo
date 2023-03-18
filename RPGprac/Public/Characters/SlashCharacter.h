@@ -154,9 +154,6 @@ protected:
 		void HeartBoom();
 	FTimerHandle HeartBoomTimer;
 
-	void CameraInterpHeart(float DeltaTime);
-
-	bool bHeart=false;
 
 	UFUNCTION()
 	void TimeRecover();
