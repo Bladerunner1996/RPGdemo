@@ -57,7 +57,7 @@ ASlashCharacter::ASlashCharacter()
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(GetRootComponent());
-	SpringArm->TargetArmLength = 400.f;
+	SpringArm->TargetArmLength = 450.f;
 
 	ViewCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("ViewCamera"));
 	ViewCamera->SetupAttachment(SpringArm);
@@ -198,7 +198,7 @@ void ASlashCharacter::CameraInterpZoom(float DeltaTime)
 			CameraCurrentFOV,
 			CameraZoomedFOV,
 			DeltaTime,
-			15);
+			5);
 	}
 	else
 	{
@@ -207,7 +207,7 @@ void ASlashCharacter::CameraInterpZoom(float DeltaTime)
 			CameraCurrentFOV,
 			CameraDefaultFOV,
 			DeltaTime,
-			20);
+			10);
 	}
 	GetFollowCamera()->SetFieldOfView(CameraCurrentFOV);
 }
@@ -345,12 +345,26 @@ void ASlashCharacter::HeartBoom()
 	auto Now = FDateTime::Now();
 	UE_LOG(LogTemp, Warning, TEXT("MonitorPlayer Time:%d %d %d"), Now.GetMinute(), Now.GetSecond(), Now.GetMillisecond());
 	float CurFOV = GetFollowCamera()->FieldOfView;
-	CameraCurrentFOV = FMath::FInterpTo(
-		CurFOV,
-		CurFOV - 10.f,
-		0.2,
-		10);
-	GetFollowCamera()->SetFieldOfView(CameraCurrentFOV);
+	if (bHeart == false) {
+		CurFOV = FMath::FInterpTo(
+			CurFOV,
+			CurFOV - 10.f,
+			0.2,
+			10);
+		bHeart = true;
+		UE_LOG(LogTemp, Warning, TEXT("p"));
+	}
+	else {
+		CurFOV = FMath::FInterpTo(
+			CurFOV,
+			CurFOV + 10.f,
+			0.2,
+			10);
+		bHeart = false;
+		UE_LOG(LogTemp, Warning, TEXT("q"));
+	}
+	UE_LOG(LogTemp, Warning, TEXT("FOV: %f"), CurFOV);
+	GetFollowCamera()->SetFieldOfView(80);
 }
 
 

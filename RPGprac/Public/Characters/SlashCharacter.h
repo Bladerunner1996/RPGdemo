@@ -151,6 +151,8 @@ protected:
 		void HeartBoom();
 	FTimerHandle HeartBoomTimer;
 
+	bool bHeart=false;
+
 	UFUNCTION()
 	void TimeRecover();
 
