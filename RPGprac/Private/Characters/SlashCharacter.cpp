@@ -153,22 +153,7 @@ void ASlashCharacter::Tick(float DeltaTime)
 		Attributes->RegenStamina(DeltaTime);
 		SlashOverlay->SetStaminaBarPercent(Attributes->GetStaminaPercent());
 	}
-	if (EquippedWeapon && EquippedWeapon->GetAttachParentSocketName()==FName("HandBowSocket")) {
-		bUseControllerRotationYaw = true;
-		GetCharacterMovement()->bOrientRotationToMovement = false;
-		if (CrossHair) {
-			//
-			CrossHair->SetVisibility(ESlateVisibility::Visible);
-		}
-	}
-	else {
-		bUseControllerRotationYaw = false;
-		GetCharacterMovement()->bOrientRotationToMovement = true;
-		if (CrossHair) {
-			//
-			CrossHair->SetVisibility(ESlateVisibility::Hidden);
-		}
-	}
+
 }
 
 void ASlashCharacter::SetOverlappingItem(AItem* Item)
@@ -437,6 +422,7 @@ void ASlashCharacter::AttachWeaponToBack()
 			Arrow->Destroy();
 		}
 	}
+	ChangeControllMode();
 }
 
 void ASlashCharacter::AttachWeaponToHand()
@@ -449,6 +435,7 @@ void ASlashCharacter::AttachWeaponToHand()
 	{
 		EquippedWeapon->AttachMeshToSocket(GetMesh(), FName("HandBowSocket"));
 	}
+	ChangeControllMode();
 }
 
 void ASlashCharacter::WhenDrawBow()
@@ -556,21 +543,6 @@ void ASlashCharacter::HitReactEnd()
 	UE_LOG(LogTemp,Warning, TEXT("Call Hit React End"));
 }
 
-void ASlashCharacter::ChangeControllerMode()
-{
-	bool isBowinHand = EquippedWeapon && EquippedWeapon->GetAttachParentSocketName() == FName("HandBowSocket");
-	if (!CrossHair) return;
-	if (isBowinHand) {
-		bUseControllerRotationYaw = true;
-		GetCharacterMovement()->bOrientRotationToMovement = false;
-		CrossHair->SetVisibility(ESlateVisibility::Visible);
-	}
-	else {
-		bUseControllerRotationYaw = false;
-		GetCharacterMovement()->bOrientRotationToMovement = true;
-		CrossHair->SetVisibility(ESlateVisibility::Hidden);
-	}
-}
 
 
 void ASlashCharacter::PlayEquipMontage(const FName& SectionName)
@@ -589,6 +561,25 @@ void ASlashCharacter::PlayBowDodgeMontage(const FName& SectionName)
 	PlayMontageSection(DodgeMontage, FName("Bow"));
 }
 
+
+void ASlashCharacter::ChangeControllMode()
+{
+	if (EquippedWeapon && EquippedWeapon->GetAttachParentSocketName() == FName("HandBowSocket"))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Bow111"));
+		bUseControllerRotationYaw = true;
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+		CrossHair->SetVisibility(ESlateVisibility::Visible);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ori222"));
+		bUseControllerRotationYaw = false;
+		GetCharacterMovement()->bOrientRotationToMovement = true;
+		CrossHair->SetVisibility(ESlateVisibility::Hidden);
+	}
+	
+}
 
 void ASlashCharacter::EKeyPressed()  //¼ñÆðÎäÆ÷
 {
@@ -651,8 +642,6 @@ void ASlashCharacter::EKeyPressed()  //¼ñÆðÎäÆ÷
 			ActionState = EActionState::EAS_EquippingWeapon;
 		}
 	}
-	
-	ChangeControllerMode();
 }
 
 void ASlashCharacter::EquipWeapon(AWeapon* Weapon)
@@ -679,7 +668,8 @@ void ASlashCharacter::EquipWeapon(AWeapon* Weapon)
 	OverlappingItem = nullptr;
 	EquippedWeapon = Weapon;
 	EquippedWeapon->SetItemState(EItemState::EIS_Equipped);
-	ChangeControllerMode();
+	ChangeControllMode();
+
 }
 
 //void ASlashCharacter::SwapWeapon(AWeapon* WeaponToSwap)  //Weapon to swap
@@ -715,7 +705,7 @@ void ASlashCharacter::FKeyPressed()
 		if (EquippedWeapon->GetSlotIndex() == 0) return;
 		ExchangeInventoryItems(EquippedWeapon->GetSlotIndex(), 0);
 	}
-	ChangeControllerMode();
+
 }
 
 void ASlashCharacter::OneKeyPressed()
@@ -724,7 +714,7 @@ void ASlashCharacter::OneKeyPressed()
 		if (EquippedWeapon->GetSlotIndex() == 1) return;
 		ExchangeInventoryItems(EquippedWeapon->GetSlotIndex(), 1);
 	}
-	ChangeControllerMode();
+
 }
 
 void ASlashCharacter::TwoKeyPressed()
@@ -733,7 +723,7 @@ void ASlashCharacter::TwoKeyPressed()
 		if (EquippedWeapon->GetSlotIndex() == 2) return;
 		ExchangeInventoryItems(EquippedWeapon->GetSlotIndex(), 2);
 	}
-	ChangeControllerMode();
+
 }
 
 void ASlashCharacter::ThreeKeyPressed()
@@ -742,7 +732,7 @@ void ASlashCharacter::ThreeKeyPressed()
 		if (EquippedWeapon->GetSlotIndex() == 3) return;
 		ExchangeInventoryItems(EquippedWeapon->GetSlotIndex(), 3);
 	}
-	ChangeControllerMode();
+
 }
 
 void ASlashCharacter::FourKeyPressed()
@@ -751,7 +741,7 @@ void ASlashCharacter::FourKeyPressed()
 		if (EquippedWeapon->GetSlotIndex() == 4) return;
 		ExchangeInventoryItems(EquippedWeapon->GetSlotIndex(), 4);
 	}
-	ChangeControllerMode();
+
 }
 
 void ASlashCharacter::FiveKeyPressed()
@@ -760,7 +750,7 @@ void ASlashCharacter::FiveKeyPressed()
 		if (EquippedWeapon->GetSlotIndex() == 5) return;
 		ExchangeInventoryItems(EquippedWeapon->GetSlotIndex(), 5);
 	}
-	ChangeControllerMode();
+
 }
 
 void ASlashCharacter::ExchangeInventoryItems(int32 CurrentItemIndex, int32 NewItemIndex)

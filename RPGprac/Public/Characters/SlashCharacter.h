@@ -136,9 +136,6 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void HitReactEnd();
 
-	UFUNCTION()
-		void ChangeControllerMode();
-
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void CameraChange(const FInputActionValue& Value);//�ı侵ͷ
@@ -154,13 +151,14 @@ protected:
 		void HeartBoom();
 	FTimerHandle HeartBoomTimer;
 
-
 	UFUNCTION()
 	void TimeRecover();
 
 	FTimerHandle DilationTimer;
 
 	bool bTimeStop=false;
+
+	void ChangeControllMode();
 
 	void EKeyPressed();
 
